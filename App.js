@@ -1,12 +1,14 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import CadastroScreen from './src/Views/CadastroScreen';
-import TeladeLogin from './src/Views/TeladeLogin';
+import Menu from './src/Views/TelaPrincipal';
+import TelaPrincipal from './src/Views/TelaPrincipal';
 
 export default props => (
+
   <SafeAreaView style={styles.container}>
-    <TeladeLogin />
-    <CadastroScreen />
+    <StatusBar barStyle='light-content' />
+    <TelaPrincipal />
   </SafeAreaView>
 )
 
