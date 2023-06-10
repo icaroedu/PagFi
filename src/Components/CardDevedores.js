@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, View, Text, Pressable, TouchableOpacity } from 'react-native';
 
 
 
@@ -14,16 +13,13 @@ export default props => (
             <View style={styles.infosView}>
                 <Text style={styles.infoText}>cpf:234.048.940-07</Text>
                 <Text style={styles.infoText}>tel:081999114513</Text>
-                <Pressable
+                <TouchableOpacity
                     activeOpacity={.7}
-
+                    style={styles.botao}
                 >
-                    <Text>$</Text>
-                </Pressable>
+                    <Text style={styles.icon}>$</Text>
+                </TouchableOpacity>
             </View>
-
-
-
         </View>
     </View >
 )
@@ -37,7 +33,8 @@ const styles = StyleSheet.create({
     },
 
     NomeText: {
-        fontSize: 18, marginVertical: 10
+        fontSize: 18,
+        marginVertical: "3%"
     },
 
     saldoDevedoresView: {
@@ -60,19 +57,41 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "500",
         color: "black",
-        marginBottom: 15,
+        marginBottom: "0%",
     },
 
     infoText: {
         fontSize: 11,
-        marginVertical: 1,
         color: "#B6B6B6",
         fontWeight: 700,
         marginRight: 10
     },
     infosView: {
-        flexDirection: "row"
-    }
+        flexDirection: "row",
+        alignItems: 'center',
+        height: "30%",
+        justifyContent: 'space-between'
+    },
+    icon: {
+        fontSize: 24,
+        fontWeight: 'bold'
+
+    },
+    botao: {
+        marginRight: "10%",
+        marginBottom: "3%",
+        width: "10%",
+        height: "90%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    linha: {
+        width: "100%",
+        height: 1,
+        backgroundColor: "#8C8C8C",
+        marginBottom: 20,
+        marginTop: 10,
+    },
 
 
 

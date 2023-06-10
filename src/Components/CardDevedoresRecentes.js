@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     },
 
     NomeText: {
-        fontSize: 18, marginVertical: 10
+        fontSize: 18,
+        marginVertical: "3%"
     },
 
     saldoDevedoresView: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#E0E0E0",
         borderTopRightRadius: 5,
         borderBottomRightRadius: 5,
-        paddingLeft: 20
+        paddingLeft: "7%"
     },
 
     aba: {
@@ -50,12 +51,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "500",
         color: "black",
-        marginBottom: 15,
+        marginBottom: "3%",
     },
 
     infoText: {
         fontSize: 11,
-        marginVertical: 1,
+        marginVertical: 0,
         color: "#B6B6B6",
         fontWeight: 700,
     },

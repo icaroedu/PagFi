@@ -1,34 +1,29 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, TouchableOpacity } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { devedores } from './CadastrandoDevedor';
 
+export function Devedores() {
 
-
-
-export function TelaPrincipal() {
     return (
-
         <View style={styles.container}>
-
-            <View style={styles.perfilView}>
-                <Pressable
-                    style={styles.perfilBotao}
-                />
-            </View>
 
             <View style={styles.linha} />
 
             <View style={{ paddingLeft: 20, width: "100%", marginBottom: 5, }} >
                 <Text style={{ fontSize: 18 }}>Devedores recentes: </Text>
             </View>
-            <CardDevedoresRecentes />
+
+
+            <CardDevedores />
+            <CardDevedores />
+            <CardDevedores />
+            <CardDevedores />
             <CardDevedores />
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
