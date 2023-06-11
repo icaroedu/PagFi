@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 
-export default function CadastroScreen () {
+const CadastroScreen = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -39,7 +39,7 @@ export default function CadastroScreen () {
   );
 };
 
-
+export default CadastroScreen;
 
 const styles = StyleSheet.create({
   container: {

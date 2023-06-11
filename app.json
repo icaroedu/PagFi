@@ -4,7 +4,7 @@
     "slug": "myprojectexpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/image/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
