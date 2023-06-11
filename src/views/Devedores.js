@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Pressable, TouchableOpacity } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
-import { devedores } from './CadastrandoDevedor';
+
 
 export function Devedores() {
 
