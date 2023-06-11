@@ -5,7 +5,7 @@ import { StyleSheet, View, Image, TextInput, Button } from 'react-native';
 
 export default props => (
     <View style={styles.container}>
-      <Image source={require('../image/logo.png')} style={styles.logo} />
+      <Image source={require('../Image/logo.png')} style={styles.logo} />
       <TextInput style={styles.input} placeholder="Nome de usuário" />
       <TextInput style={styles.input} placeholder="Senha" secureTextEntry={true} />
       <Button title="Entrar" onPress={() => { }}
