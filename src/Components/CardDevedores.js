@@ -4,32 +4,47 @@ import { StyleSheet, View, Text, Pressable, TouchableOpacity } from 'react-nativ
 
 
 
-export default props => (
-    <View style={styles.Conatiner}>
-        <View style={styles.aba} />
-        <View style={styles.saldoDevedoresView}>
-            <Text style={styles.NomeText}>Nome e sobrenome do devedor</Text>
-            <Text style={styles.valorText}>R$: 00,00</Text>
-            <View style={styles.infosView}>
-                <Text style={styles.infoText}>cpf:234.048.940-07</Text>
-                <Text style={styles.infoText}>tel:081999114513</Text>
-                <TouchableOpacity
-                    activeOpacity={.7}
-                    style={styles.botao}
-                >
-                    <Text style={styles.icon}>$</Text>
-                </TouchableOpacity>
-            </View>
+export function CardDevedores({ nome, valor, cpf, telefone }) {
+
+    return (
+        <View>
+            <View style={styles.Conatiner}>
+                <View style={styles.aba} />
+                <View style={styles.saldoDevedoresView}>
+                    <Text style={styles.NomeText}>{nome}</Text>
+                    <Text style={styles.valorText}>R$:{valor}</Text>
+                    <View style={styles.infosView}>
+                        <Text style={styles.infoText}>cpf:{cpf}</Text>
+                        <Text style={styles.infoText}>tel:{telefone}</Text>
+                        <TouchableOpacity
+                            activeOpacity={.7}
+                            style={styles.botao}
+                        >
+                            <Text style={styles.icon}>$</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View >
+            <View style={styles.linha} />
         </View>
-    </View >
-)
+
+    )
+}
 
 const styles = StyleSheet.create({
     Conatiner: {
-        width: "90%",
+        width: "95%",
         height: 100,
         marginVertical: 5,
+        marginHorizontal: 5,
         flexDirection: 'row'
+    },
+
+    linha: {
+        width: "100%",
+        height: 2,
+        backgroundColor: "#E0E0E0",
+        marginTop: "20%",
     },
 
     NomeText: {
