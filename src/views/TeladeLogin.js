@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, TextInput, Button } from 'react-native';
 
 
 
+<<<<<<< HEAD
 
 export default props => (
   <View style={styles.container}>
@@ -18,6 +19,22 @@ export default props => (
       }} />
   </View>
 )
+=======
+export default props => (
+    <View style={styles.container}>
+      <Image source={require('../Image/logo.png')} style={styles.logo} />
+      <TextInput style={styles.input} placeholder="Nome de usuário" />
+      <TextInput style={styles.input} placeholder="Senha" secureTextEntry={true} />
+      <Button title="Entrar" onPress={() => { }}
+        style={{
+          borderWidth: 1, // Adiciona uma borda com largura 1
+          borderColor: 'red', // Define a cor da borda como vermelha
+          backgroundColor: 'white', // Define a cor de fundo como azul
+          borderRadius: 5, // Define o raio dos cantos do botão
+        }} />
+    </View>
+  )
+>>>>>>> main
 
 const styles = StyleSheet.create({
   container: {
