@@ -1,8 +1,8 @@
-import React from 'react';
-import { StyleSheet, View, Text, Pressable, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Pressable, TouchableOpacity, FlatList, ScrollView, Modal } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import { CardDevedores } from '../Components/CardDevedores';
-
+import { ClientDb } from '../services/Client';
 
 
 export function Devedores() {
@@ -61,22 +61,64 @@ export function Devedores() {
 
     ]
 
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [usuario, setUsuario] = useState();
+
+    const renderModal = (item) => {
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Text style={styles.textStyle}>{item}</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
     return (
         <View style={styles.container}>
+
+            {renderModal(usuario)}
+
 
             <View style={styles.linha} />
 
             <FlatList
                 data={listaDevedores}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <CardDevedores
-                        nome={item.nome}
-                        valor={item.valor}
-                        cpf={item.cpf}
-                        telefone={item.telefone}
-                    />
-                )}
+                renderItem={({ item }) => {
+                    return (
+                        <>
+                            <CardDevedores
+                                nome={item.nome}
+                                valor={item.valor}
+                                cpf={item.cpf}
+                                telefone={item.telefone}
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    setUsuario(item.nome)
+
+                                }}
+                            />
+
+                        </>
+
+                    )
+
+                }}
             />
         </View>
     )
@@ -109,6 +151,56 @@ const styles = StyleSheet.create({
         height: "7.5%",
         width: "100%",
         justifyContent: 'flex-start',
-    }
+    },
+
+
+
+
+
+
+
+
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
 
 });

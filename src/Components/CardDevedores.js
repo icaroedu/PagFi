@@ -1,11 +1,12 @@
-import React from 'react';
-import { StyleSheet, View, Text, Pressable, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Pressable, TouchableOpacity, Modal } from 'react-native';
 
 
 
 
-export function CardDevedores({ nome, valor, cpf, telefone }) {
+export function CardDevedores({ nome, valor, cpf, telefone, onPress }) {
 
+    const [modalVisible, setModalVisible] = useState(false);
     return (
         <View>
             <View style={styles.Conatiner}>
@@ -19,6 +20,7 @@ export function CardDevedores({ nome, valor, cpf, telefone }) {
                         <TouchableOpacity
                             activeOpacity={.7}
                             style={styles.botao}
+                            onPress={onPress}
                         >
                             <Text style={styles.icon}>$</Text>
                         </TouchableOpacity>
