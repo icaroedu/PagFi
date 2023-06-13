@@ -5,7 +5,7 @@ const CadastroScreen = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [Confirmarsenha, setConfrimarSenha] = useState('');
+  const [Confirmarsenha, setConfirmarSenha] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cpf, setCPF] = useState('');
 
@@ -59,7 +59,7 @@ const CadastroScreen = () => {
         style={styles.input}
         placeholder="Confirmar Senha"
         secureTextEntry={true}
-        value={senha}
+        value={Confirmarsenha}
         onChangeText={text => setConfirmarSenha(text)}
       />
       <Button title="Cadastrar" onPress={cadastrar} />

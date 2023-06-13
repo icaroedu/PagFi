@@ -4,7 +4,8 @@ import CadastroScreen from './src/Views/CadastroScreen';
 import TeladeLogin from './src/Views/TeladeLogin';
 import ProfileScreen from './src/Views/PerfilAdmin';
 import { TelaPrincipal } from './src/Views/TelaPrincipal';
-import { Devedores } from './src/Views/Devedores'
+import { Devedores } from './src/Views/Devedores.js'
+
 export default props => (
   <SafeAreaView style={styles.container}>
     <StatusBar barStyle="light-content" />
