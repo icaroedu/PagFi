@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, FlatList, ScrollView, Modal } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import { CardDevedores } from '../Components/CardDevedores';
@@ -7,200 +7,190 @@ import { ClientDb } from '../services/Client';
 
 export function Devedores() {
 
-    const listaDevedores = [
-        {
-            id: "000",
-            nome: "Leo Almeida",
-            telefone: 1199911451,
-            cpf: "198.879.638-689",
-            valor: "R$25,00"
-        },
+  async function getList() {
+    const listaDevedor = await ClientDb.listClient() || [];
+    setListaCliente(listaDevedor);
+  }
 
-        {
-            id: "001",
-            nome: "Gabriel Almeida",
-            telefone: 82999114513,
-            cpf: "198.879.638-689",
-            valor: "50,00",
-        },
-        {
-            id: "002",
-            nome: "Amanda Almeida",
-            telefone: 8999114513,
-            cpf: "198.879.638-689",
-            valor: "30,00"
-        },
-        {
-            id: "003",
-            nome: "Fernando Alqqmeida",
-            telefone: 81999114511,
-            cpf: "198.879.638-689",
-            valor: "40,00"
-        },
-        {
-            id: "004",
-            nome: "Euzinho da siqqlva",
-            telefone: 81991114512,
-            cpf: "198.872.638-683",
-            valor: "20,00"
-        },
-        {
-            id: "005",
-            nome: "Euzinho da siaalva",
-            telefone: 81999114514,
-            cpf: "198.879.638-689",
-            valor: "20,00"
-        },
-        {
-            id: "006",
-            nome: "Euzinho da silva",
-            telefone: 2324545665,
-            cpf: "198.879.632-689",
-            valor: "20,00"
-        },
-
-    ]
+  async function updateList() {
+    const listaDevedor = await ClientDb.setClient();
+    setListaCliente(listaDevedor);
+  }
 
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [usuario, setUsuario] = useState();
 
-    const renderModal = (item) => {
-        return (
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => setModalVisible(!modalVisible)}>
-                            <Text style={styles.textStyle}>{item}</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
-        )
-    }
+  useEffect(() => {
+    getList();
+  }, [])
+
+  useEffect(() => {
+    updateList();
+  }, [listaCliente])
+
+
+  function handleRemoveClient(id) {
+    setListaCliente(oldState => oldState.filter(listaCliente => listaCliente.id !== id));
+  }
+
+  const [listaCliente, setListaCliente] = useState()
+  const [modalVisible, setModalVisible] = useState(false);
+  const [id, setId] = useState();
+  console.log("Minha lista aqui:", listaCliente)
+
+  const renderModal = (item) => {
     return (
-        <View style={styles.container}>
+      <Modal
 
-            {renderModal(usuario)}
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Devedor realizou o pagamento?</Text>
+
+            <View style={{ width: "100%", height: "100%", flexDirection: "row", justifyContent: "space-between" }}>
+              <Pressable
+                style={[styles.button]}
+                onPress={() => {
+                  handleRemoveClient(item)
+                  setModalVisible(!modalVisible)
+                }}
+              >
+                <Text style={styles.textStyle}>Sim</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button]}
+                onPress={() => {
+                  setModalVisible(!modalVisible)
+                }}
+              >
+                <Text style={styles.textStyle}>Não</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+  return (
+    <View style={styles.container}>
+
+      {renderModal(id)}
 
 
-            <View style={styles.linha} />
+      <View style={styles.linha} />
 
-            <FlatList
-                data={listaDevedores}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => {
-                    return (
-                        <>
-                            <CardDevedores
-                                nome={item.nome}
-                                valor={item.valor}
-                                cpf={item.cpf}
-                                telefone={item.telefone}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                    setUsuario(item.nome)
-
-                                }}
-                            />
-
-                        </>
-
-                    )
+      <FlatList
+        data={listaCliente}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => {
+          return (
+            <>
+              <CardDevedores
+                nome={item.Nome}
+                valor={item.Divida}
+                cpf={item.CPF}
+                telefone={item.Telefone}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setId(item.id)
 
                 }}
-            />
-        </View>
-    )
+              />
+
+            </>
+
+          )
+
+        }}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
 
-        backgroundColor: "#fff",
+  },
+  linha: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#8C8C8C",
+    marginBottom: 20,
+    marginTop: "20%",
+  },
+  perfilBotao: {
+    height: "100%",
+    width: "15%",
+    backgroundColor: "#F3F3F3",
+    justifyContent: 'flex-start',
+    borderRadius: 1000,
+    marginLeft: "5%"
+  },
 
+  perfilView: {
+    height: "7.5%",
+    width: "100%",
+    justifyContent: 'flex-start',
+  },
+
+
+
+
+
+
+
+
+
+  centeredView: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    width: "95%",
+    height: "20%",
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    opacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    linha: {
-        width: "100%",
-        height: 1,
-        backgroundColor: "#8C8C8C",
-        marginBottom: 20,
-        marginTop: "20%",
-    },
-    perfilBotao: {
-        height: "100%",
-        width: "15%",
-        backgroundColor: "#F3F3F3",
-        justifyContent: 'flex-start',
-        borderRadius: 1000,
-        marginLeft: "5%"
-    },
-
-    perfilView: {
-        height: "7.5%",
-        width: "100%",
-        justifyContent: 'flex-start',
-    },
-
-
-
-
-
-
-
-
-
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    backgroundColor: 'black',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    width: "40%",
+    height: "60%",
+    justifyContent: "center"
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: "500",
+    fontSize: 18,
+    width: "100%"
+  },
 
 });

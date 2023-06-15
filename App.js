@@ -9,7 +9,8 @@ import { Devedores } from './src/Views/Devedores.js'
 export default props => (
   <SafeAreaView style={styles.container}>
     <StatusBar barStyle="light-content" />
-    <Devedores />
+    {/* <Devedores /> */}
+    <TelaPrincipal />
   </SafeAreaView>
 )
 

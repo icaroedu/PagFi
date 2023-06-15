@@ -4,23 +4,23 @@ import { StyleSheet, View, Text } from 'react-native';
 
 
 
-export default props => (
-    <View style={styles.Conatiner}>
-        <View style={styles.aba} />
-        <View style={styles.saldoDevedoresView}>
-            <Text style={style = styles.NomeText}>Nome e sobrenome do devedor</Text>
-            <Text style={styles.valorText}>R$: 00,00</Text>
-            <Text style={styles.infoText}>cpf: 234.048.940-07     tel: 081999114513</Text>
+export function CardDevedoresRecentes({ nome, valor, cpf, telefone, }) {
+    return (
+        <View style={styles.Conatiner}>
+            <View style={styles.aba} />
+            <View style={styles.saldoDevedoresView}>
+                <Text style={style = styles.NomeText}>{nome}</Text>
+                <Text style={styles.valorText}>R$:{valor}</Text>
+                <Text style={styles.infoText}>{cpf}      {telefone}</Text>
+            </View>
+        </View >
+    )
+}
 
-
-
-        </View>
-    </View >
-)
 
 const styles = StyleSheet.create({
     Conatiner: {
-        width: "90%",
+        width: "95%",
         height: 100,
         marginVertical: 5,
         flexDirection: 'row'
