@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
-export function TelaPrincipal() {
+export default function  TelaPrincipal() {
     return (
 
         <View style={styles.container}>

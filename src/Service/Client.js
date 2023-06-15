@@ -2,7 +2,7 @@ import database from "./firebaseConfig.js"
 
 
 
-const ClientDb = {
+const clientDb = {
 
   // Collection Usada
   currentColl : "Clientes",
@@ -217,4 +217,4 @@ const ClientDb = {
 
 }
 
-export { ClientDb }
+export { clientDb }
