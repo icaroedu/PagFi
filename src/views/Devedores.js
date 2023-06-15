@@ -12,24 +12,16 @@ export function Devedores() {
     setListaCliente(listaDevedor);
   }
 
-  async function updateList() {
-    const listaDevedor = await ClientDb.setClient();
-    setListaCliente(listaDevedor);
-  }
-
 
 
   useEffect(() => {
     getList();
   }, [])
 
-  useEffect(() => {
-    updateList();
-  }, [listaCliente])
 
-
-  function handleRemoveClient(id) {
+  async function handleRemoveClient(id) {
     setListaCliente(oldState => oldState.filter(listaCliente => listaCliente.id !== id));
+    await ClientDb.DeleteClient(id);
   }
 
   const [listaCliente, setListaCliente] = useState()
