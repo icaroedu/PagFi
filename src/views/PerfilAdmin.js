@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { View, Text, TextInput, Button, Image,StyleSheet,Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Padding, Color, Border, FontSize } from "../../GlobalStyles";
+import { LoginContext } from '../Context/LoginContext';
+
 
 const ProfileScreen = () => {
   const [name, setName] = useState('Admin');
-  const [photo, setPhoto] = useState('');
   const navigation = useNavigation();
+  const { userName, updateUserName } = useContext(LoginContext);
 
   const handleNameChange = (text) => {
     setName(text);
@@ -22,9 +24,7 @@ const ProfileScreen = () => {
   }
 
   const handleLogout = () => {
-    // Aqui você pode adicionar lógica para realizar o logout do administrador
-    // Por exemplo, redirecionar para a tela de login
-    console.log('Logout');
+    navigation.replace('TeladeLogin');
   };
 
   return (
@@ -48,8 +48,10 @@ const ProfileScreen = () => {
       </View>
 
       
-      <Text style={[styles.useradmin, styles.useradminClr]}>UserName</Text>
-      <Text style={[styles.sair, styles.sairTypo]}>Sair</Text>
+      <Text style={[styles.useradmin, styles.useradminClr]}>{userName}</Text>
+      <Pressable onPress={handleLogout} >
+        <Text  style={[styles.sair, styles.sairTypo]}>Sair</Text>
+      </Pressable>
 
 
       <View style={[styles.frameView, styles.meuInnerSpaceBlock]}>

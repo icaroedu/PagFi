@@ -1,8 +1,8 @@
 import database from "./firebaseConfig.js"
+import firebase from "firebase/compat";
 
 
-
-const ClientDb = {
+const clientDb = {
 
   // Collection Usada
   currentColl : "Clientes",
@@ -13,10 +13,11 @@ const ClientDb = {
    */
   listClient: async function () {
       const list = [];
-      const snapshot = await database.collection(this.currentColl).get();
+      const snapshot = await database.collection(this.currentColl).orderBy('dataCriacao', 'desc').limit(50).get();
       snapshot.forEach((doc) => {
         list.push({ id: doc.id, ...doc.data() });
       });
+
       return list;
   },
 
@@ -28,7 +29,8 @@ const ClientDb = {
   addClient: async function (client){
       const doc = await database.collection(this.currentColl).doc()
       console.log(doc.id)
-      clientesRef = doc.set(client).then(function() {
+      clientN = {...client,dataCriacao:firebase.firestore.FieldValue.serverTimestamp()}
+      clientesRef = doc.set(clientN).then(function() {
         
       })
         .catch(function(error) {
@@ -217,4 +219,4 @@ const ClientDb = {
 
 }
 
-export { ClientDb }
+export { clientDb }

@@ -5,31 +5,97 @@ import CardDevedores from '../Components/CardDevedores';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { NavTab } from '../Components/NavTab';
-import { ClientDb } from '../services/Client';
+import { clientDb } from '../Services/Client';
 
 
 
 
 export default function CadastrandoDevedor() {
 
-
-  async function addClient(nome, telefone, cpf, valor) {
-
-    console.log("Nome::::::", nome)
-    const client = {
-      "Nome": nome,
-      "Telefone": telefone,
-      "CPF": cpf,
-      "Divida": valor,
-    }
-
-    await ClientDb.addClient(client);
-  }
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [cpf, setCpf] = useState("");
   const [valor, setValor] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [fail,setFail] = useState(false)
+  const [failMessage,setFailMessage] = useState('')
+
+
+  const navigation = useNavigation(); 
+
+  async function addClient() {
+
+    if(checkValues()){
+      setFail(false)
+      const client = {
+        "Nome": nome,
+        "Telefone": telefone,
+        "CPF": cpf,
+        "Divida": valor,
+      }
+  
+      await clientDb.addClient(client);
+
+      return true
+    }else{
+      setFail(true)
+      return false
+    }
+
+  }
+
+  const checkValues = () =>{
+    if(nome!="" && telefone !="" && cpf !== "" && valor !==""){
+      return true
+    }else{
+      setFailMessage("Não são permitidos campos vazios!")
+      return false
+    }
+  }
+
+  const formatCpf = (text) => {
+    // Remove todos os caracteres não numéricos do texto
+    let cleanedText = text.replace(/\D/g, '');
+
+    // Aplica a máscara do CPF (###.###.###-##)
+    let formattedText = '';
+    for (let i = 0; i < cleanedText.length; i++) {
+      if (i === 3 || i === 6) {
+        formattedText += '.';
+      } else if (i === 9) {
+        formattedText += '-';
+      }
+      formattedText += cleanedText.charAt(i);
+    }
+
+    return formattedText;
+  };
+
+  const handleCpfChange = (text) => {
+    const formattedCpf = formatCpf(text);
+    setCpf(formattedCpf);
+  };
+
+  const formatTelefone = (text) => {
+    // Remove todos os caracteres não numéricos do texto
+    let cleanedText = text.replace(/\D/g, '');
+
+    // Verifica o tamanho do texto e aplica a máscara apropriada
+    if (cleanedText.length <= 10) {
+      // Formato: (##) ####-####
+      let formattedText = cleanedText.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      return formattedText;
+    } else {
+      // Formato: (##) #####-####
+      let formattedText = cleanedText.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      return formattedText;
+    }
+  };
+
+  const handleTelefoneChange = (text) => {
+    const formattedTelefone = formatTelefone(text);
+    setTelefone(formattedTelefone);
+  };
 
 
   const renderModal = () => {
@@ -51,6 +117,7 @@ export default function CadastrandoDevedor() {
                 style={[styles.buttonModal]}
                 onPress={() => {
                   setModalVisible(!modalVisible)
+                  navigation.replace('TelaPrincipal');
                 }}
               >
                 <Text style={styles.textStyle}>Concluir</Text>
@@ -75,6 +142,7 @@ export default function CadastrandoDevedor() {
 
           <TextInput
             style={styles.input}
+            value={nome}
             placeholder='Digite aqui'
             onChangeText={setNome}
           />
@@ -87,7 +155,10 @@ export default function CadastrandoDevedor() {
           <TextInput
             style={styles.input}
             placeholder='Digite aqui'
-            onChangeText={setTelefone}
+            value={telefone}
+            onChangeText={handleTelefoneChange}
+            keyboardType="numeric"
+            maxLength={15}
           />
         </View>
 
@@ -97,7 +168,10 @@ export default function CadastrandoDevedor() {
           <TextInput
             style={styles.input}
             placeholder='Digite aqui'
-            onChangeText={setCpf}
+            value={cpf}
+            onChangeText={handleCpfChange}
+            maxLength={14}
+            keyboardType="numeric"
           />
         </View>
 
@@ -107,18 +181,28 @@ export default function CadastrandoDevedor() {
           <TextInput
             style={styles.input}
             placeholder='Digite aqui'
+            value={valor}
             onChangeText={setValor}
+            maxLength={5}
+            keyboardType="numeric"
           />
         </View>
       </ScrollView>
 
 
+        { fail ? (
+          <Text style={styles.warn} >{failMessage}</Text>
+        ) : null
+        }
+
+
       <View style={styles.viewButton}>
         <Pressable
           style={styles.button}
-          onPress={() => {
-            addClient(nome, telefone, cpf, valor)
-            setModalVisible(!modalVisible)
+          onPress={async () => {
+            if( await addClient()){
+              setModalVisible(!modalVisible) 
+            }
           }}
         >
           <Text style={styles.textButton}>Emprestar</Text>
@@ -244,7 +328,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     width: "100%"
   },
-
+  warn:{
+    color:"red",
+    marginBottom:12
+  }
 
 
 

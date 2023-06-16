@@ -1,7 +1,7 @@
 import React, { useContext,useState } from 'react';
 import { StyleSheet, View, TextInput, Image, Button,Pressable,Text } from 'react-native';
-import { LoginContext } from '../Context/LoginContext';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { LoginContext } from '../Context/LoginContext';
 // import { Image } from "expo-image";
 
 export default function  TeladeLogin() {
@@ -9,6 +9,8 @@ export default function  TeladeLogin() {
   const navigation = useNavigation(); 
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
+  const [fail,setFail] = useState(false)
+  const { userName, updateUserName } = useContext(LoginContext);
 
   const handleNome = (text) => {
     setNome(text);
@@ -26,7 +28,11 @@ export default function  TeladeLogin() {
           let userLogin = {nome,senha}
           const logou = await login(userLogin)
           if(logou){
+            setFail(false)
+            updateUserName(nome)
             navigation.replace('TelaPrincipal');
+          }else{
+            setFail(true)
           }
           
         }}>
@@ -41,6 +47,11 @@ export default function  TeladeLogin() {
         }}>
           <Text style={[styles.text]}>Cadastre-se</Text>
         </Pressable>
+
+        { fail ? (
+          <Text style={styles.warn} >Nome ou senha incorretos!</Text>
+        ) : null
+        }
 
       </View>
     )
@@ -81,5 +92,7 @@ const styles = StyleSheet.create({
   text: {
     color:"#FFFFFF"
   },
-
+  warn:{
+    color:"red"
+  }
 });

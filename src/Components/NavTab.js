@@ -86,20 +86,19 @@ export function NavTab() {
 
 const styles = StyleSheet.create({
   menu: {
-    left: 5,
     width: '100%',
     height: "8%",
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
   },
 
   // Xx
   leftView: {
     justifyContent: "center",
     alignItems: "center",
-    width: "15%",
+    width: 100,
     height: "90%",
   },
   centerView: {
@@ -109,7 +108,8 @@ const styles = StyleSheet.create({
     height: 50,
   },
   rightView: {
-    width: "22%",
+    width: 100,
+   
     height: "90%",
     justifyContent: "center",
     alignItems: "center"
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     height: "80%",
     top: "0%",
     padding: 5,
-    position: "absolute",
+    position: "relative",
   },
   vectorIcon1: {
     width: 20,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     marginRight: 12
   },
   devedores: {
-    color: "B6B6B6",
+    color: "#B6B6B6",
   },
   devedoresTypo: {
     // fontFamily: FontFamily.h7,

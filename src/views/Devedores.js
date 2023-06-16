@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, FlatList, ScrollView, Modal } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import { CardDevedores } from '../Components/CardDevedores';
-import { ClientDb } from '../services/Client';
+import { clientDb } from '../Services/Client';
 import { NavTab } from '../Components/NavTab';
 import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 
@@ -10,7 +10,7 @@ export default function Devedores() {
 
 
   async function getList() {
-    const listaDevedor = await ClientDb.listClient() || [];
+    const listaDevedor = await clientDb.listClient() || [];
     setListaCliente(listaDevedor);
   }
 
@@ -29,7 +29,7 @@ export default function Devedores() {
 
   async function handleRemoveClient(id) {
     setListaCliente(oldState => oldState.filter(listaCliente => listaCliente.id !== id));
-    await ClientDb.DeleteClient(id);
+    await clientDb.DeleteClient(id);
   }
 
   const [listaCliente, setListaCliente] = useState([])
@@ -87,9 +87,8 @@ export default function Devedores() {
         {
           listaCliente.map((item, index) => {
             return (
-              <>
+              <View key={index}>
                 <CardDevedores
-                  key={index}
                   nome={item.Nome}
                   valor={item.Divida}
                   cpf={item.CPF}
@@ -101,7 +100,7 @@ export default function Devedores() {
                   }}
                 />
                 <View style={styles.linha} />
-              </>
+              </View>
             )
           })
 

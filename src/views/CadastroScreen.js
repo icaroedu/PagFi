@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Image, StyleSheet,Pressable,Text } from 'react-native';
-import { userDb } from '../Service/User';
+import { userDb } from '../Services/User';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const CadastroScreen = () => {
@@ -10,18 +10,83 @@ const CadastroScreen = () => {
   const [Confirmarsenha, setConfirmarSenha] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cpf, setCPF] = useState('');
+  const [fail,setFail] = useState(false)
+  const [failMessage,setFailMessage] = useState('')
 
   const navigation = useNavigation(); 
 
   const cadastrar = async () => {
-    // Aqui você pode adicionar a lógica para enviar os dados de cadastro
-    const user = {Nome:nome,Email:email,Senha:senha,Telefone:telefone,CPF:cpf}
-    const Cadastro = await userDb.addUser(user)
-    // console.lof(Cadastro)
-    if(Cadastro.id){
-      navigation.replace('TeladeLogin');
+
+    if(checkValues()){
+      setFail(false)
+      const user = {Nome:nome,Email:email,Senha:senha,Telefone:telefone,CPF:cpf}
+      const Cadastro = await userDb.addUser(user)
+      // console.log(user)
+      if(Cadastro?.id){
+        navigation.replace('TeladeLogin');
+      }
+    }else{
+      setFail(true)
+    }
+    return true
+  };
+
+  const checkValues = () =>{
+    if(nome!="" && email !="" && senha !="" && telefone !="" && cpf !== "" && Confirmarsenha !== ""){
+      if(senha === Confirmarsenha){
+        return true
+      }else{
+        setFailMessage("Senhas não Iguais!")
+        return false
+      }
+    }else{
+      setFailMessage("Não são permitidos campos vazios!")
+      return false
+    }
+  }
+
+  const formatCpf = (text) => {
+    // Remove todos os caracteres não numéricos do texto
+    let cleanedText = text.replace(/\D/g, '');
+
+    // Aplica a máscara do CPF (###.###.###-##)
+    let formattedText = '';
+    for (let i = 0; i < cleanedText.length; i++) {
+      if (i === 3 || i === 6) {
+        formattedText += '.';
+      } else if (i === 9) {
+        formattedText += '-';
+      }
+      formattedText += cleanedText.charAt(i);
     }
 
+    return formattedText;
+  };
+
+  const handleCpfChange = (text) => {
+    const formattedCpf = formatCpf(text);
+    setCPF(formattedCpf);
+  };
+
+  const formatTelefone = (text) => {
+    // Remove todos os caracteres não numéricos do texto
+    let cleanedText = text.replace(/\D/g, '');
+
+    // Verifica o tamanho do texto e aplica a máscara apropriada
+    if (cleanedText.length <= 10) {
+      // Formato: (##) ####-####
+      let formattedText = cleanedText.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      return formattedText;
+    } else {
+      // Formato: (##) #####-####
+      let formattedText = cleanedText.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      return formattedText;
+    }
+  };
+
+  const handleTelefoneChange = (text) => {
+    const formattedTelefone = formatTelefone(text);
+    setTelefone(formattedTelefone);
   };
 
   return (
@@ -42,16 +107,18 @@ const CadastroScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Telefone"
-        secureTextEntry={true}
         value={telefone}
-        onChangeText={text => setTelefone(text)}
+        onChangeText={handleTelefoneChange}
+        keyboardType="numeric"
+        maxLength={15}
       />
       <TextInput
         style={styles.input}
         placeholder="CPF"
-        secureTextEntry={true}
         value={cpf}
-        onChangeText={text => setCPF(text)}
+        onChangeText={handleCpfChange}
+        maxLength={14}
+        keyboardType="numeric"
       />
        <TextInput
         style={styles.input}
@@ -68,7 +135,13 @@ const CadastroScreen = () => {
         onChangeText={text => setConfirmarSenha(text)}
       />
 
-      <Pressable  onPress={cadastrar} style={styles.bottonSpaceBlock}>
+        { fail ? (
+          <Text style={styles.warn} >{failMessage}</Text>
+        ) : null
+        }
+
+
+      <Pressable  onPress={ async () => { await cadastrar()}} style={styles.bottonSpaceBlock}>
         <Text style={[styles.text]}>Cadastrar</Text>
       </Pressable>
     </View>
@@ -117,6 +190,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: 'flex-start',
   },
+  warn:{
+    color:"red",
+    marginBottom:12
+  }
 });
 
 

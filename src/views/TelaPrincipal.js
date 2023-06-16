@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
 import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { CardDevedoresRecentes } from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
-import { ClientDb } from '../services/Client';
+import { clientDb } from '../Services/Client';
 import { NavTab } from '../Components/NavTab';
 
 
@@ -21,7 +21,7 @@ export default function TelaPrincipal() {
 
 
     async function getList() {
-        const lista = await ClientDb.listClient();
+        const lista = await clientDb.listClient();
 
         setListaCliente(lista);
     }
@@ -52,6 +52,7 @@ export default function TelaPrincipal() {
                     style={styles.perfilBotao}
                     onPress={handlePerfil}
                 />
+            
             </View>
 
             <View style={styles.linha} />
