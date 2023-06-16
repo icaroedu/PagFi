@@ -1,92 +1,252 @@
 import React, { useState } from 'react';
-import { StyleSheet, View,TextInput, Text, Pressable,Image } from 'react-native';
+import { StyleSheet, View, TextInput, Text, Pressable, Image, ScrollView, Modal } from 'react-native';
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavTab } from '../Components/NavTab';
+import { ClientDb } from '../services/Client';
+
 
 
 
 export default function CadastrandoDevedor() {
-  const [rectangleTextInput, setRectangleTextInput] = useState();
-  const [rectangleTextInput1, setRectangleTextInput1] = useState();
-  const [rectangleTextInput2, setRectangleTextInput2] = useState();
-  const [rectangleTextInput3, setRectangleTextInput3] = useState();
-  const navigation = useNavigation();
 
+
+  async function addClient(nome, telefone, cpf, valor) {
+
+    console.log("Nome::::::", nome)
+    const client = {
+      "Nome": nome,
+      "Telefone": telefone,
+      "CPF": cpf,
+      "Divida": valor,
+    }
+
+    await ClientDb.addClient(client);
+  }
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [valor, setValor] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+  const renderModal = () => {
     return (
-        <View style={styles.emprestar}>
-          <View style={styles.emprestarChild} />
-          <View style={styles.emprestarInner}>
-            <View style={styles.instanceChild} />
+      <Modal
+
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Cadastro realizado com sucesso!</Text>
+
+            <View style={{ width: "100%", height: "100%", alignItems: "center" }}>
+              <Pressable
+                style={[styles.buttonModal]}
+                onPress={() => {
+                  setModalVisible(!modalVisible)
+                }}
+              >
+                <Text style={styles.textStyle}>Concluir</Text>
+              </Pressable>
+            </View>
           </View>
+        </View>
+      </Modal>
+    )
+  }
 
-          <Pressable style={[styles.bottonEmprestar, styles.iconDollarAlt1SpaceBlock]}>
-            <Text style={[styles.emprestar1, styles.emprestar1Typo]}>
-              Emprestar
-            </Text>
-          </Pressable>
+  return (
 
+    <View style={styles.container}>
+      <Text style={styles.title}>Cadastrando Devedor</Text>
+      <View style={styles.linha} />
+      {renderModal()}
 
-          <Pressable
-            style={[styles.iconChevronLeft, styles.iconSpaceBlock]}
-            onPress={() => navigation.navigate("TelaPrincipal")}
-          >
-            <Image
-              style={styles.vectorIcon}
-              contentFit="cover"
-              source={require("../Image/vector12.png")}
-            />
-          </Pressable>
-          <View style={[styles.iconUserAdd, styles.iconSpaceBlock]}>
-            <Image
-              style={styles.vectorIcon1}
-              contentFit="cover"
-              source={require("../Image/vector21.png")}
-            />
-          </View>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.iputBox}>
+          <Text style={styles.inputTitle}>Nome e sobrenome:</Text>
 
-
-          <Text
-            style={[styles.cadastrandoDevedor, styles.emprestar1Typo]}
-          >{`Cadastrando Devedor`}</Text>
-          <Text style={[styles.nomeCompleto, styles.cpfTypo]}>Nome completo:</Text>
           <TextInput
-            style={[styles.emprestarItem, styles.emprestarChildLayout]}
-            placeholder="Place your text"
-            value={rectangleTextInput}
-            onChangeText={setRectangleTextInput}
+            style={styles.input}
+            placeholder='Digite aqui'
+            onChangeText={setNome}
           />
+        </View>
 
-          <Text style={[styles.telefone, styles.cpfTypo]}>Telefone:</Text>
+
+        <View style={styles.iputBox}>
+          <Text style={styles.inputTitle}>Telefone:</Text>
+
           <TextInput
-            style={[styles.rectangleRnktextinput, styles.emprestarChildLayout]}
-            placeholder="Place your text"
-            value={rectangleTextInput1}
-            onChangeText={setRectangleTextInput1}
+            style={styles.input}
+            placeholder='Digite aqui'
+            onChangeText={setTelefone}
           />
+        </View>
 
-          <Text style={[styles.cpf, styles.cpfTypo]}>CPF:</Text>
+        <View style={styles.iputBox}>
+          <Text style={styles.inputTitle}>CPF:</Text>
+
           <TextInput
-            style={[styles.emprestarChild1, styles.emprestarChildLayout]}
-            placeholder="Place your text"
-            value={rectangleTextInput2}
-            onChangeText={setRectangleTextInput2}
+            style={styles.input}
+            placeholder='Digite aqui'
+            onChangeText={setCpf}
           />
+        </View>
 
-          <Text style={[styles.valor, styles.cpfTypo]}>Valor:</Text>
+        <View style={styles.iputBox}>
+          <Text style={styles.inputTitle}>Valor:</Text>
+
           <TextInput
-            style={[styles.emprestarChild2, styles.emprestarChildLayout]}
-            placeholder="Place your text"
-            value={rectangleTextInput3}
-            onChangeText={setRectangleTextInput3}
-          />        
+            style={styles.input}
+            placeholder='Digite aqui'
+            onChangeText={setValor}
+          />
+        </View>
+      </ScrollView>
 
+
+      <View style={styles.viewButton}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            addClient(nome, telefone, cpf, valor)
+            setModalVisible(!modalVisible)
+          }}
+        >
+          <Text style={styles.textButton}>Emprestar</Text>
+        </Pressable>
       </View>
-      );
-    };
-   
+      <NavTab />
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
-  
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: 'center',
+    padding: 5,
+    paddingTop: 30,
+  },
+
+  title: {
+    fontSize: 25,
+    fontWeight: "bold"
+  },
+
+  linha: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#C6C6C6",
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  input: {
+    height: 40,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    fontSize: 16,
+  },
+
+  iputBox: {
+    width: "90%",
+    borderRadius: 10,
+    marginLeft: "5%",
+    height: 100,
+    backgroundColor: "#F3F3F3",
+    padding: 10,
+    marginVertical: 10,
+
+  },
+  inputTitle: {
+    fontSize: 18,
+    fontWeight: "bold"
+  },
+  viewButton: {
+    width: "100%",
+    height: "10%",
+    fontWeight: "bold",
+    paddingLeft: "50%",
+    paddingRight: "5%",
+  },
+
+  button: {
+    backgroundColor: "black",
+    width: "100%",
+    height: "70%",
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  textButton: {
+    color: "white",
+    fontWeight: "bold"
+  },
+
+  centeredView: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    width: "95%",
+    height: "20%",
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    opacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonModal: {
+    backgroundColor: 'black',
+    borderRadius: 50,
+    padding: 10,
+    elevation: 2,
+    width: "60%",
+    height: "60%",
+    justifyContent: "center"
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: "500",
+    fontSize: 18,
+    width: "100%"
+  },
+
+
+
+
 });
 

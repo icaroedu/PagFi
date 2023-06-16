@@ -9,9 +9,9 @@ export function CardDevedoresRecentes({ nome, valor, cpf, telefone, }) {
         <View style={styles.Conatiner}>
             <View style={styles.aba} />
             <View style={styles.saldoDevedoresView}>
-                <Text style={style = styles.NomeText}>{nome}</Text>
+                <Text style={styles.NomeText}>{nome}</Text>
                 <Text style={styles.valorText}>R$:{valor}</Text>
-                <Text style={styles.infoText}>{cpf}      {telefone}</Text>
+                <Text style={styles.infoText}>cpf: {cpf}      tel: {telefone}</Text>
             </View>
         </View >
     )
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 11,
         marginVertical: 0,
-        color: "#B6B6B6",
+        color: "gray",
         fontWeight: 700,
     },
 

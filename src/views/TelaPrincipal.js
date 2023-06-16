@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { CardDevedoresRecentes } from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
@@ -14,7 +14,7 @@ import { NavTab } from '../Components/NavTab';
 export default function TelaPrincipal() {
 
     const [listaCliente, setListaCliente] = useState([])
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
     const clientesRecentes = listaCliente.slice(0, 5);
 
 
@@ -26,13 +26,19 @@ export default function TelaPrincipal() {
         setListaCliente(lista);
     }
 
-    function handlePerfil(){
+    function handlePerfil() {
         navigation.replace('PerfilAdmin');
     }
 
     useEffect(() => {
         getList();
     }, [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getList();
+        }, [])
+    );
 
 
 
@@ -53,13 +59,13 @@ export default function TelaPrincipal() {
             <View style={{ paddingLeft: 20, width: "100%", marginBottom: 10, flexDirection: "row", alignItems: "baseline" }} >
                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>Devedores recentes: </Text>
                 <Pressable style={{ marginLeft: "22%" }}>
-                    <Text style={{ color: "black", fontWeight: "bold" }} 
-                     onPress={() => navigation.navigate("Devedores")}
+                    <Text style={{ color: "black", fontWeight: "bold" }}
+                        onPress={() => navigation.navigate("Devedores")}
                     >Ver todos</Text>
                 </Pressable>
             </View>
 
-            <ScrollView style={{ paddingLeft: 10,maxHeight:700 }}>
+            <ScrollView style={{ paddingLeft: 10, maxHeight: 700 }}>
                 {
                     clientesRecentes.map((item, index) => {
                         return (

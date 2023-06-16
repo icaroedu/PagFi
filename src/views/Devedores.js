@@ -4,10 +4,10 @@ import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import { CardDevedores } from '../Components/CardDevedores';
 import { ClientDb } from '../services/Client';
 import { NavTab } from '../Components/NavTab';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 
 export default function Devedores() {
-  
+
 
   async function getList() {
     const listaDevedor = await ClientDb.listClient() || [];
@@ -20,6 +20,12 @@ export default function Devedores() {
     getList();
   }, [])
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getList();
+    }, [])
+  );
+
 
   async function handleRemoveClient(id) {
     setListaCliente(oldState => oldState.filter(listaCliente => listaCliente.id !== id));
@@ -30,7 +36,6 @@ export default function Devedores() {
   const [modalVisible, setModalVisible] = useState(false);
   const [id, setId] = useState();
   console.log("Minha lista aqui:", listaCliente)
-  const navigation = useNavigation(); 
 
   const renderModal = (item) => {
     return (
@@ -74,19 +79,15 @@ export default function Devedores() {
     <View style={styles.container}>
 
       {renderModal(id)}
-
-      <View style={styles.perfilView}>
-        <Pressable
-            style={styles.perfilBotao}
-            onPress={ () => navigation.navigate("PerfilAdmin") }
-        />
-      </View>
+      <Text style={styles.title}>Devedores</Text>
+      <View style={styles.linha} />
 
 
-      <ScrollView style={styles.lista}>
+      <ScrollView>
         {
-          listaCliente.map((item, index) =>{
+          listaCliente.map((item, index) => {
             return (
+              <>
                 <CardDevedores
                   key={index}
                   nome={item.Nome}
@@ -96,9 +97,11 @@ export default function Devedores() {
                   onPress={() => {
                     setModalVisible(!modalVisible);
                     setId(item.id)
-  
+
                   }}
                 />
+                <View style={styles.linha} />
+              </>
             )
           })
 
@@ -114,14 +117,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    alignItems: 'center',
+    padding: 5,
+    paddingTop: 30,
 
   },
   linha: {
     width: "100%",
     height: 1,
     backgroundColor: "#8C8C8C",
+    marginTop: 5,
     marginBottom: 20,
-    marginTop: "20%",
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold"
   },
   perfilBotao: {
     height: "100%",
@@ -136,10 +146,10 @@ const styles = StyleSheet.create({
     height: "7.5%",
     width: "100%",
     justifyContent: 'flex-start',
-    marginVertical:12,
+    marginVertical: 12,
   },
-  lista:{
-    maxHeight:590
+  lista: {
+    maxHeight: 590
   },
 
 

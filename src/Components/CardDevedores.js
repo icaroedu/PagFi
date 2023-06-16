@@ -36,11 +36,11 @@ export function CardDevedores({ nome, valor, cpf, telefone, onPress }) {
 const styles = StyleSheet.create({
     Conatiner: {
         width: "95%",
-        height: 100,
+        height: 120,
         marginVertical: 5,
         marginHorizontal: 5,
         flexDirection: 'row',
-        marginBottom:20
+        marginBottom: 20
     },
 
     linha: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 
     infoText: {
         fontSize: 11,
-        color: "#B6B6B6",
+        color: "gray",
         fontWeight: 700,
         marginRight: 10
     },
