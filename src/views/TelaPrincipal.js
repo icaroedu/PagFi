@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+
 import { CardDevedoresRecentes } from '../Components/CardDevedoresRecentes';
 import CardDevedores from '../Components/CardDevedores';
 import { ClientDb } from '../services/Client';
+import { NavTab } from '../Components/NavTab';
 
 
 
 
 
+export default function TelaPrincipal() {
 
-export function TelaPrincipal() {
+    const [listaCliente, setListaCliente] = useState([])
+    const navigation = useNavigation(); 
+    const clientesRecentes = listaCliente.slice(0, 5);
+
+
+
 
     async function getList() {
         const lista = await ClientDb.listClient();
 
         setListaCliente(lista);
+    }
+
+    function handlePerfil(){
+        navigation.replace('PerfilAdmin');
     }
 
     useEffect(() => {
@@ -23,9 +36,7 @@ export function TelaPrincipal() {
 
 
 
-    const [listaCliente, setListaCliente] = useState([])
-    console.log(listaCliente)
-    const clientesRecentes = listaCliente.slice(0, 5);
+
     return (
 
         <View style={styles.container}>
@@ -33,19 +44,22 @@ export function TelaPrincipal() {
             <View style={styles.perfilView}>
                 <Pressable
                     style={styles.perfilBotao}
+                    onPress={handlePerfil}
                 />
             </View>
 
             <View style={styles.linha} />
 
-            <View style={{ paddingLeft: 20, width: "100%", marginBottom: 5, flexDirection: "row", alignItems: "baseline" }} >
+            <View style={{ paddingLeft: 20, width: "100%", marginBottom: 10, flexDirection: "row", alignItems: "baseline" }} >
                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>Devedores recentes: </Text>
                 <Pressable style={{ marginLeft: "22%" }}>
-                    <Text style={{ color: "#B6B6B6", fontWeight: "bold" }}>Ver todos</Text>
+                    <Text style={{ color: "black", fontWeight: "bold" }} 
+                     onPress={() => navigation.navigate("Devedores")}
+                    >Ver todos</Text>
                 </Pressable>
             </View>
 
-            <ScrollView style={{ paddingLeft: 10 }}>
+            <ScrollView style={{ paddingLeft: 10,maxHeight:700 }}>
                 {
                     clientesRecentes.map((item, index) => {
                         return (
@@ -60,6 +74,8 @@ export function TelaPrincipal() {
                     })
                 }
             </ScrollView>
+
+            <NavTab></NavTab>
         </View>
     )
 }
@@ -76,7 +92,7 @@ const styles = StyleSheet.create({
     linha: {
         width: "100%",
         height: 1,
-        backgroundColor: "#8C8C8C",
+        backgroundColor: "white",
         marginBottom: 20,
         marginTop: 10,
     },
@@ -90,7 +106,7 @@ const styles = StyleSheet.create({
     },
 
     perfilView: {
-        height: "7.5%",
+        height: "6.5%",
         width: "100%",
         justifyContent: 'flex-start',
     }

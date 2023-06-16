@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Image, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Image, StyleSheet,Pressable,Text } from 'react-native';
+import { userDb } from '../Service/User';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const CadastroScreen = () => {
   const [nome, setNome] = useState('');
@@ -9,14 +11,17 @@ const CadastroScreen = () => {
   const [telefone, setTelefone] = useState('');
   const [cpf, setCPF] = useState('');
 
-  const cadastrar = () => {
+  const navigation = useNavigation(); 
+
+  const cadastrar = async () => {
     // Aqui você pode adicionar a lógica para enviar os dados de cadastro
-    console.log('Nome:', nome);
-    console.log('Email:', email);
-    console.log('Senha:', senha);
-    console.log('Confirmar Senha:', Confirmarsenha);
-    console.log('Telefone:', telefone);
-    console.log('CPF:', cpf);
+    const user = {Nome:nome,Email:email,Senha:senha,Telefone:telefone,CPF:cpf}
+    const Cadastro = await userDb.addUser(user)
+    // console.lof(Cadastro)
+    if(Cadastro.id){
+      navigation.replace('TeladeLogin');
+    }
+
   };
 
   return (
@@ -62,7 +67,10 @@ const CadastroScreen = () => {
         value={Confirmarsenha}
         onChangeText={text => setConfirmarSenha(text)}
       />
-      <Button title="Cadastrar" onPress={cadastrar} />
+
+      <Pressable  onPress={cadastrar} style={styles.bottonSpaceBlock}>
+        <Text style={[styles.text]}>Cadastrar</Text>
+      </Pressable>
     </View>
   );
 };
@@ -90,6 +98,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+  }, 
+  bottonSpaceBlock: {
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    flexDirection: "row",
+    backgroundColor: "#FF8A01",
+    borderRadius: 10,
+    position:"relative",
+    color:"#FFFFFF",
+    marginBottom:10
+  },
+  text: {
+    color:"#FFFFFF"
+  },  
+  perfilView: {
+    height: "7.5%",
+    width: "100%",
+    justifyContent: 'flex-start',
   },
 });
 

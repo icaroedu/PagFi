@@ -3,9 +3,11 @@ import { StyleSheet, View, Text, Pressable, TouchableOpacity, FlatList, ScrollVi
 import CardDevedoresRecentes from '../Components/CardDevedoresRecentes';
 import { CardDevedores } from '../Components/CardDevedores';
 import { ClientDb } from '../services/Client';
+import { NavTab } from '../Components/NavTab';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
-
-export function Devedores() {
+export default function Devedores() {
+  
 
   async function getList() {
     const listaDevedor = await ClientDb.listClient() || [];
@@ -24,10 +26,11 @@ export function Devedores() {
     await ClientDb.DeleteClient(id);
   }
 
-  const [listaCliente, setListaCliente] = useState()
+  const [listaCliente, setListaCliente] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
   const [id, setId] = useState();
   console.log("Minha lista aqui:", listaCliente)
+  const navigation = useNavigation(); 
 
   const renderModal = (item) => {
     return (
@@ -72,33 +75,37 @@ export function Devedores() {
 
       {renderModal(id)}
 
+      <View style={styles.perfilView}>
+        <Pressable
+            style={styles.perfilBotao}
+            onPress={ () => navigation.navigate("PerfilAdmin") }
+        />
+      </View>
 
-      <View style={styles.linha} />
 
-      <FlatList
-        data={listaCliente}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => {
-          return (
-            <>
-              <CardDevedores
-                nome={item.Nome}
-                valor={item.Divida}
-                cpf={item.CPF}
-                telefone={item.Telefone}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  setId(item.id)
+      <ScrollView style={styles.lista}>
+        {
+          listaCliente.map((item, index) =>{
+            return (
+                <CardDevedores
+                  key={index}
+                  nome={item.Nome}
+                  valor={item.Divida}
+                  cpf={item.CPF}
+                  telefone={item.Telefone}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setId(item.id)
+  
+                  }}
+                />
+            )
+          })
 
-                }}
-              />
+        }
 
-            </>
-
-          )
-
-        }}
-      />
+      </ScrollView>
+      <NavTab></NavTab>
     </View>
   )
 }
@@ -129,14 +136,11 @@ const styles = StyleSheet.create({
     height: "7.5%",
     width: "100%",
     justifyContent: 'flex-start',
+    marginVertical:12,
   },
-
-
-
-
-
-
-
+  lista:{
+    maxHeight:590
+  },
 
 
   centeredView: {

@@ -1,8 +1,8 @@
 import React, { useContext,useState } from 'react';
-import { StyleSheet, View, Image, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Image, Button,Pressable,Text } from 'react-native';
 import { LoginContext } from '../Context/LoginContext';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
+// import { Image } from "expo-image";
 
 export default function  TeladeLogin() {
   const { login } = useContext(LoginContext);
@@ -22,21 +22,26 @@ export default function  TeladeLogin() {
         <Image source={require('../Image/logo.png')} style={styles.logo} />
         <TextInput style={styles.input} placeholder="Nome de usuário"  onChangeText={handleNome} value={nome}/>
         <TextInput style={styles.input} placeholder="Senha" secureTextEntry={true} onChangeText={handleSenha} value={senha} />
-        <Button title="Entrar" onPress={async () => { 
+        <Pressable style={[styles.bottonEntrar, styles.bottonSpaceBlock]} onPress={async () => { 
           let userLogin = {nome,senha}
           const logou = await login(userLogin)
           if(logou){
-            navigation.replace('Devedores');
+            navigation.replace('TelaPrincipal');
           }
           
+        }}>
+          <Text style={[styles.text]}>Entrar</Text>
+        </Pressable>
+        <Pressable style={[styles.bottonCadastreSe, styles.bottonSpaceBlock]}
+        onPress={async () => { 
+
+            navigation.replace('CadastroScreen');
           
-        }}
-          style={{
-            borderWidth: 1, // Adiciona uma borda com largura 1
-            borderColor: 'red', // Define a cor da borda como vermelha
-            backgroundColor: 'white', // Define a cor de fundo como azul
-            borderRadius: 5, // Define o raio dos cantos do botão
-          }} />
+          
+        }}>
+          <Text style={[styles.text]}>Cadastre-se</Text>
+        </Pressable>
+
       </View>
     )
   }
@@ -62,6 +67,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
-  }
+  },
+  bottonSpaceBlock: {
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    flexDirection: "row",
+    backgroundColor: "#FF8A01",
+    borderRadius: 10,
+    position:"relative",
+    color:"#FFFFFF",
+    marginBottom:10
+  },
+  text: {
+    color:"#FFFFFF"
+  },
 
 });

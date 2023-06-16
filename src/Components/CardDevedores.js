@@ -27,7 +27,7 @@ export function CardDevedores({ nome, valor, cpf, telefone, onPress }) {
                     </View>
                 </View>
             </View >
-            <View style={styles.linha} />
+            {/* <View style={styles.linha} /> */}
         </View>
 
     )
@@ -39,13 +39,13 @@ const styles = StyleSheet.create({
         height: 100,
         marginVertical: 5,
         marginHorizontal: 5,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom:20
     },
 
     linha: {
         width: "100%",
         height: 2,
-        backgroundColor: "#E0E0E0",
         marginTop: "20%",
     },
 
